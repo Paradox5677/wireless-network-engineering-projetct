@@ -1,0 +1,13 @@
+{
+  "duration_slots": 10000,
+  "slot_ms": 1.0,
+  "num_users": 8,
+  "packet_size_bits": 1000,
+  "arrival_rate_pps": [200, 200, 160, 160, 120, 120, 80, 80],
+  "channel": {
+    "base_rate_bps": 2000000,
+    "std_db": 3.0
+  },
+  "queue_max_size": 100,
+  "seeds": [0, 1, 2, 3, 4]
+}

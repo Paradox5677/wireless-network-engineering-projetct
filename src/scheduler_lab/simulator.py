@@ -8,6 +8,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from typing import Any
+import numpy as np
 
 from scheduler_lab.schedulers.base import Scheduler
 
@@ -78,6 +79,8 @@ class Simulator:
 
     def run(self) -> ExperimentResult:
         """执行一次完整仿真并返回汇总结果。"""
+        rng = np.random.default_rng(self.seed)
+        self.scheduler.reset()
         raise NotImplementedError("第 3 周任务：按伪代码实现仿真主循环")
 
     # ------------------------------------------------------------------

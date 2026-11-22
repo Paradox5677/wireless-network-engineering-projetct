@@ -6,6 +6,7 @@ from scheduler_lab.schedulers.base import Scheduler, UserState
 
 class RoundRobinScheduler(Scheduler):
     """轮询调度器。
+    最简单的调度，按用户编号顺序循环选择，跳过空队列用户。
 
     规格：
     - name = "round-robin"。
@@ -23,7 +24,16 @@ class RoundRobinScheduler(Scheduler):
         self._next_index = 0
 
     def reset(self) -> None:
-        raise NotImplementedError("第 2 周任务：实现 reset")
+        self._next_index = 0
+        # raise NotImplementedError("第 2 周任务：实现 reset")
 
     def select_user(self, users: list[UserState]) -> int | None:
-        raise NotImplementedError("第 2 周任务：实现 RR 轮询选择")
+        n = len(users)
+        for u_i in range(n):
+            user_index = (self._next_index + u_i) % n  # 周期性循环扫描用户，n个为周期
+            if users[user_index].queue_bits > 0:
+                # 非空队列用户被选中，更新 next_index 并返回 user_id
+                self._next_index = (user_index + 1) % n
+                return user_index
+        return None  # 所有用户队列为空
+        # raise NotImplementedError("第 2 周任务：实现 RR 轮询选择")

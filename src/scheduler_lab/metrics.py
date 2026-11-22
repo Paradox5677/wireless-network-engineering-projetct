@@ -20,4 +20,16 @@ def jain_fairness(values: Sequence[float]) -> float:
     Returns:
         Jain 公平性指数，范围 (0, 1]。
     """
-    raise NotImplementedError("第 2 周任务：实现 Jain 公平性指数")
+    if not values:
+        return 1.0
+    if any(v < 0 for v in values):
+        raise ValueError("输入值不能为负数")
+    elif all(v == 0 for v in values):
+        return 1.0
+    # 计算 Jain 公平性指数
+    n = len(values)
+    sum_values = sum(values)
+    sum_squares = sum(v ** 2 for v in values)
+    jain_index = (sum_values ** 2) / (n * sum_squares)
+    return jain_index
+    # raise NotImplementedError("第 2 周任务：实现 Jain 公平性指数")

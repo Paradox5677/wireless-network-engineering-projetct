@@ -85,15 +85,15 @@ def generate_poisson_traffic(
         if isinstance(rate_pps, (int, float)):
             rate = float(rate_pps)
         else:
-            rate = float(rate_pps[u])
-        for u in range(users_id):
+            rate = [float(r) for r in rate_pps]
+        for u in range(num_users):
             # 为每个用户在当前时隙生成泊松到达的包
             n_u_t = rng.poisson(rate * slot_s)  # 该用户在当前时隙的到达包数
             for _ in range(n_u_t):
                 # 生成一个包
                 packet = Packet(
                     user_id=u,
-                    arrival_slot=t,
+                    arrival_slot=current_slot,
                     size_bits=packet_size_bits,
                 )
                 packets.append(packet)

@@ -82,15 +82,17 @@ def generate_poisson_traffic(
     ) -> list[Packet]:
         packets: list[Packet] = []
         # 把标量和序列区分开
-        if isinstance(rate_pps, (int, float)):
-            rate = float(rate_pps)
-        else:
-            rate = [float(r) for r in rate_pps]
-        for u in range(num_users):
-            # 为每个用户在当前时隙生成泊松到达的包
-            n_u_t = rng.poisson(rate * slot_s)  # 该用户在当前时隙的到达包数
-            for _ in range(n_u_t):
-                # 生成一个包
+        if isinstance(rate_pps, (int, float, np.integer, np.floating)):                                           │
+│           rates = [float(rate_pps)] * num_users                │
+│       else:                                                    │
+│           if len(rate_pps) != num_users:                       │
+│               raise ValueError("rate_pps 的长度必须等于 num_users")                                              │
+│           rates = [float(rate) for rate in rate_pps]
+        # 为每个用户在当前时隙生成泊松到达的包
+        for u, rate in enumerate(rates):
+            # 生成当前时隙的到达包数 n_u
+            n_u = rng.poisson(rate * slot_s)
+            for _ in range(n_u):
                 packet = Packet(
                     user_id=u,
                     arrival_slot=current_slot,
